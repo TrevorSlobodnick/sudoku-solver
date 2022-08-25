@@ -1,0 +1,120 @@
+body {
+    background: whitesmoke;
+    color: #333;
+}
+
+#find-solution-container .btn{
+    background: #333;
+    color: white;
+}
+
+
+
+/* Sizing/centering for main components */
+#sudoku-table, #find-solution-container{
+    max-width: 450px;
+    margin: auto;
+}
+
+/* Remove outline/boxshadow when an input from the main sudoku input has focus */
+#sudoku-table .form-control:focus, #sudoku-table .form-control:active{
+    outline: none !important;
+    box-shadow: none;
+}
+
+
+
+
+#container{
+    text-align: center;
+}
+
+#sudoku-table{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#sudoku-table .box{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border: solid thin black;
+}
+
+#sudoku-table .form-control{
+    border-radius: 0px;
+    text-align: center;
+    padding: 0;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#find-solution-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+
+
+
+
+/* START - HIDE UP AND DOWN ARROWS FROM INPUT */
+/* Chrome, Safari, Edge, Opera */
+#sudoku-table .form-control::-webkit-outer-spin-button,
+#sudoku-table .form-control::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#sudoku-table .form-control[type=number] {
+  -moz-appearance: textfield;
+}
+/* END - HIDE UP AND DOWN ARROWS FROM INPUT */
+
+
+
+
+
+/* Media Queries */
+@media (max-width: 481px){
+    /* breakpoint comes from testing */
+    #sudoku-table .form-control{
+        /* change font size of input table */
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 381px){
+    /* breakpoint comes from testing */
+    #sudoku-table .form-control{
+        /* change font size of input table */
+        font-size: 1rem;
+    }
+}
+
+/* Light theme styles - based on OS setting or a user agent setting */
+@media (prefers-color-scheme: light) {
+    body {
+      background: whitesmoke;
+      color: #333;
+    }
+
+    #find-solution-container .btn{
+        background: #333;
+        color: white;
+    }
+}
+
+/* Dark theme styles - based on OS setting or a user agent setting */
+@media (prefers-color-scheme: dark) {
+    body {
+      background: #333;
+      color: whitesmoke;
+    }
+
+    #find-solution-container .btn{
+        background: whitesmoke;
+        color: black;
+    }
+}
