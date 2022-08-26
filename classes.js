@@ -22,7 +22,7 @@ class Cell{
      * @param {Number} value 
      * @param {Boolean} protected 
      */
-    constructor(box, pos, value, protected){
+    constructor(box, pos, value, protected = false){
         this.box = box
         this.pos = pos
         this.value = value
@@ -37,6 +37,15 @@ class Board{
      */
     constructor(cells){
         this.cells = cells
+    }
+
+    /**
+     * Get a specific row from the board
+     * @param {Position} pos the Position of the Cell
+     * @returns {Cell} the requested cell
+     */
+    getCell(pos){
+        return this.cells.find(value => value.pos.row === pos.row && value.pos.col === pos.col)
     }
 
     /**
@@ -62,7 +71,21 @@ class Board{
      * @param {Number} num the box to get [1-9]
      * @returns {Array<Cell>} the requested box
      */
-    geBox(num){
+    getBox(num){
         return this.cells.filter(value => value.box === num)
+    }
+
+    /**
+     * Checks if every cell in the board contains a non-zero value
+     * @returns {Boolean} true if every cell contains a non-zero value, false otherwise
+     */
+    isBoardFilled(){
+        for (let i = 0; i < this.cells.length; i++) {
+            const cell = this.cells[i];
+            if(cell.value === 0){
+                return false
+            }
+        }
+        return true
     }
 }

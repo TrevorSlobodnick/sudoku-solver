@@ -33,17 +33,18 @@ cellInputs.forEach(inp => inp.addEventListener("input", onCellInput))
 // listens for a window resize event, and then updates the columns
 window.addEventListener('resize', matchCellHeightToWidth);
 // listeners for both of the solution buttons
-findOneBtn.addEventListener("click", onFindOneBtnClick)
+findOneBtn.addEventListener("click", onFindBtnClick)
+findAllBtn.addEventListener("click", onFindBtnClick)
 
 // Event Handler Functions
-function onFindOneBtnClick(){
+function onFindBtnClick(e){
     const board = new Board(getCells())
-    console.log(board)
-    // findSolution()
-}
-
-function onFindAllBtnClick(){
-    
+    if(e.currentTarget == findOneBtn){
+        findSolution(board)
+    }
+    else{
+        //TODO: implement finding all solutions
+    }
 }
 
 /**
@@ -79,23 +80,14 @@ function matchCellHeightToWidth(e){
  * @param {Boolean} generateAllSolutions - false if the function should return the first solution found, 
  * true if the function should return all of the solutions
  */
-async function findSolution(board, generateAllSolutions = false){
-    // Loop through board and store any non-empty value in the array
-    // This is to preserve the spot of the value to make sure it isnt changed while finding solutions
-    let protectedPositions = []
-    board.forEach(row => {
-        row.forEach(col => {
-            if(col){
-                protectedPositions.push(new Position(row, col))
-            }
-        })
-    })
-    console.log(protectedPositions)
-    // for (let i = 0; i < board.length; i++) {
-    //     for (let j = 0; j < board[i].length; j++) {
-            
-    //     }
-    // }
+async function findSolution(board, pos = new Position(1, 1)){
+    const cell = board.getCell(pos)
+    if(cell.value === 9){
+        cell.value = 0
+    }
+    else{
+        cell.value++
+    }
 }
 
 /**
@@ -110,19 +102,18 @@ function getCells(){
         const col = parseInt(inp.dataset.col)
         const pos = new Position(row, col)
 
-        let value = inp.value
-        let protected = false
+        let value, protected
         if(inp.value !== ""){
             value = parseInt(inp.value)
             protected = true
+        }
+        else{
+            value = 0
+            protected = false
         }
 
         const cell = new Cell(box, pos, value, protected)
         cells.push(cell)
     })
     return cells
-}
-
-function checkSolution(board){
-
 }
