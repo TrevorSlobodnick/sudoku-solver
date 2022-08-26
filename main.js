@@ -14,10 +14,13 @@ matchCellHeightToWidth();
 // Event Listeners
 // listens for a window resize event, and then updates the columns
 window.addEventListener('resize', matchCellHeightToWidth);
+// listeners for both of the solution buttons
+findOneBtn.addEventListener("click", onFindOneBtnClick)
 
 // Event Handler Functions
 function onFindOneBtnClick(){
     const board = new Board(getCells())
+    console.log(board)
     // findSolution()
 }
 
@@ -66,13 +69,23 @@ async function findSolution(board, generateAllSolutions = false){
  * Reads the inputs from the sudoku input table and returns an array of that data
  */
 function getCells(){
-    let board = []
+    let cells = []
     cellInputs.forEach(inp => {
+        const box = parseInt(inp.parentElement.dataset.box)
+
         const row = parseInt(inp.dataset.row)
         const col = parseInt(inp.dataset.col)
         const pos = new Position(row, col)
-        const cell = new Cell(pos, inp.value)
+
+        let value = inp.value;
+        if(inp.value !== ""){
+            value = parseInt(inp.value)
+        }
+
+        const cell = new Cell(box, pos, value)
+        cells.push(cell)
     })
+    return cells
 }
 
 function checkSolution(board){
