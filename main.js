@@ -10,6 +10,7 @@ const findAllBtn = document.getElementById("find-all");
 // Init
 // sets the height of the input cells so that they are equal to the width
 matchCellHeightToWidth();
+cellInputs.forEach(inp => inp.addEventListener("input", onCellInput))
 
 // Event Listeners
 // listens for a window resize event, and then updates the columns
@@ -26,6 +27,13 @@ function onFindOneBtnClick(){
 
 function onFindAllBtnClick(){
     
+}
+
+function onCellInput(e){
+    const regex = /^[1-9]$/
+    if(!regex.test(e.currentTarget.value)){
+        e.currentTarget.value = e.currentTarget.value.slice(0, -1)
+    }
 }
 
 // Functions
