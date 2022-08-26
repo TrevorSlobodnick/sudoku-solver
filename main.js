@@ -99,7 +99,7 @@ async function findSolution(board, generateAllSolutions = false){
 }
 
 /**
- * Reads the inputs from the sudoku input table and returns an array of that data
+ * Reads the inputs from the sudoku input table and returns an array of Cells that contain the board data
  */
 function getCells(){
     let cells = []
@@ -110,21 +110,19 @@ function getCells(){
         const col = parseInt(inp.dataset.col)
         const pos = new Position(row, col)
 
-        let value = inp.value;
+        let value = inp.value
+        let protected = false
         if(inp.value !== ""){
             value = parseInt(inp.value)
+            protected = true
         }
 
-        const cell = new Cell(box, pos, value)
+        const cell = new Cell(box, pos, value, protected)
         cells.push(cell)
     })
     return cells
 }
 
 function checkSolution(board){
-
-}
-
-function isCellProtected(cell1, cell2){
 
 }

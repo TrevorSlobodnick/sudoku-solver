@@ -15,15 +15,18 @@ class Cell{
     box;
     pos;
     value;
+    protected;
     /**
      * @param {Number} box 
      * @param {Position} pos 
      * @param {Number} value 
+     * @param {Boolean} protected 
      */
-    constructor(box, pos, value){
-        this.box = box;
+    constructor(box, pos, value, protected){
+        this.box = box
         this.pos = pos
         this.value = value
+        this.protected = protected
     }
 }
 
