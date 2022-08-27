@@ -81,12 +81,16 @@ function matchCellHeightToWidth(e){
  * true if the function should return all of the solutions
  */
 async function findSolution(board, pos = new Position(1, 1)){
-    const cell = board.getCell(pos)
-    if(cell.value === 9){
-        cell.value = 0
+    // check if solved
+    if(board.isFilled()){
+        // solution has been found
+        return true
     }
-    else{
-        cell.value++
+    // if the board is not solved, we need to start plugging in numbers
+    for (let i = 1; i <= 9; i++) {
+        if(board.isValid()){
+            
+        }
     }
 }
 

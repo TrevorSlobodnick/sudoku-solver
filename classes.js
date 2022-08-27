@@ -30,6 +30,34 @@ class Cell{
     }
 }
 
+class Row{
+    row;
+    cells;
+    /**
+     * @param {Number} row - the number of the row
+     * @param {Array<Cell>} cells - an array containing all the cells in a row
+     */
+    constructor(row, cells){
+        this.row = row;
+        this.cells = cells;
+    }
+
+    isValid(){
+        let nonZeroValues = []
+        for (let i = 1; i <= 9; i++) {
+            const cell = this.cells[i]
+            if(cell.value != 0){
+                if(nonZeroValues.includes(cell.value)){
+                    return false
+                }
+                else{
+                    nonZeroValues.push(cell.value)
+                }
+            }
+        }
+    }
+}
+
 class Board{
     cells;
     /**
@@ -79,11 +107,45 @@ class Board{
      * Checks if every cell in the board contains a non-zero value
      * @returns {Boolean} true if every cell contains a non-zero value, false otherwise
      */
-    isBoardFilled(){
+    isFilled(){
         for (let i = 0; i < this.cells.length; i++) {
             const cell = this.cells[i];
             if(cell.value === 0){
                 return false
+            }
+        }
+        return true
+    }
+
+    isValid(){
+        // we need these functions so that they can be used in the middle for loop
+        const functions = [
+            this.getRow,
+            this.getColumn,
+            this.getBox
+        ]
+        // We need to validate 3 things, the rows, columns and boxes
+        for (let i = 0; i < 3; i++) {
+            // using I we can determine which function we are using based on functions array
+            // now we need to loop through each row, column, and box
+            for (let j = 1; j <= 9; j++) {
+                // j represents which row/column/box we are on
+                // combined with i, we can now call our functions to get appropriate cells
+                const cells = functions[i](j)
+                let nonZeroValues = []
+                // now that we have our cells, we need to go through each one individually
+                for (let k = 1; k <= 9; k++) {
+                    // get the cell using k
+                    const cell = cells[k]
+                    if(cell.value != 0){
+                        if(nonZeroValues.includes(cell.value)){
+                            return false
+                        }
+                        else{
+                            nonZeroValues.push(cell.value)
+                        }
+                    }
+                }
             }
         }
         return true
