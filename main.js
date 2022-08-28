@@ -40,7 +40,16 @@ findAllBtn.addEventListener("click", onFindBtnClick)
 function onFindBtnClick(e){
     const board = new Board(getCells())
     if(e.currentTarget == findOneBtn){
-        findSolution(board)
+        if(findSolution)
+        findSolution(board).then(result => {
+            if(result){
+                console.log("Solved")
+            }
+            else{
+                console.log("Cannot Solve")
+            }
+            board.print()
+        })
     }
     else{
         //TODO: implement finding all solutions
@@ -77,21 +86,36 @@ function matchCellHeightToWidth(e){
 /**
  * Find a single solution or every solution for a given sudoku board
  * @param {Array<Cell>} board - An array of all the Cells on the board
- * @param {Boolean} generateAllSolutions - false if the function should return the first solution found, 
- * true if the function should return all of the solutions
+ * @param {Position} pos - the current position
  */
 async function findSolution(board, pos = new Position(1, 1)){
-    // check if solved
-    if(board.isFilled()){
-        // solution has been found
-        return true
-    }
     // if the board is not solved, we need to start plugging in numbers
+    const cell = board.getCell(pos)
+    // there are 9 possible values a cell could be...
     for (let i = 1; i <= 9; i++) {
+        // since we cant override user inputted values, we need to check before overriding
+        if(!cell.isProtected){
+            cell.value = i
+        }
+        // board.isValid simply checks if the current cell values dont break any rules
         if(board.isValid()){
-            
+            if(pos.hasNext()){
+                const r = await findSolution(board, pos.next())
+                if(r){
+                    return Promise.resolve(true)
+                }
+            }
+            else{
+                // Board has no more cells
+                console.log("Board has no more cells");
+                return Promise.resolve(true)
+            }
+        }
+        if(!cell.isProtected){
+            cell.value = 0
         }
     }
+    return Promise.resolve(false)
 }
 
 /**

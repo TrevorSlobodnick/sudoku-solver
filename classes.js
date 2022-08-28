@@ -9,52 +9,38 @@ class Position{
         this.row = row
         this.col = col
     }
+
+    hasNext(){
+        if(this.row === 9 && this.col === 9){
+            return false
+        }
+        return true
+    }
+
+    next(){
+        if(this.col === 9){
+            return new Position(this.row + 1, 1)
+        }
+        return new Position(this.row, this.col + 1)
+    }
 }
 
 class Cell{
     box;
     pos;
     value;
-    protected;
+    isProtected;
     /**
      * @param {Number} box 
      * @param {Position} pos 
      * @param {Number} value 
-     * @param {Boolean} protected 
+     * @param {Boolean} isProtected 
      */
-    constructor(box, pos, value, protected = false){
+    constructor(box, pos, value, isProtected = false){
         this.box = box
         this.pos = pos
         this.value = value
-        this.protected = protected
-    }
-}
-
-class Row{
-    row;
-    cells;
-    /**
-     * @param {Number} row - the number of the row
-     * @param {Array<Cell>} cells - an array containing all the cells in a row
-     */
-    constructor(row, cells){
-        this.row = row;
-        this.cells = cells;
-    }
-
-    isValid(){
-        let nonZeroValues = []
-        for (let i = 1; i <= 9; i++) {
-            const cell = this.cells[i]
-            if(cell.value != 0){
-                if(nonZeroValues.includes(cell.value)){
-                    return false
-                }
-                else{
-                    nonZeroValues.push(cell.value)
-                }
-            }
-        }
+        this.isProtected = isProtected
     }
 }
 
@@ -119,22 +105,27 @@ class Board{
 
     isValid(){
         // we need these functions so that they can be used in the middle for loop
+        // we need to use bind in order to provide scope, adding .bind(this) will make sure that when
+        // we call functions[i](j), the this. statements in those functions are referring to Board object (local scope),
+        // rather than global scope
         const functions = [
-            this.getRow,
-            this.getColumn,
-            this.getBox
+            this.getRow.bind(this),
+            this.getColumn.bind(this),
+            this.getBox.bind(this)
         ]
         // We need to validate 3 things, the rows, columns and boxes
         for (let i = 0; i < 3; i++) {
-            // using I we can determine which function we are using based on functions array
+            // using i we can determine which function we are using based on the functions array
             // now we need to loop through each row, column, and box
             for (let j = 1; j <= 9; j++) {
                 // j represents which row/column/box we are on
                 // combined with i, we can now call our functions to get appropriate cells
                 const cells = functions[i](j)
+                // cells is an array containing the 9 cells
+                // nonZeroValues is used to track the values in cells while iterating
                 let nonZeroValues = []
                 // now that we have our cells, we need to go through each one individually
-                for (let k = 1; k <= 9; k++) {
+                for (let k = 0; k < 9; k++) {
                     // get the cell using k
                     const cell = cells[k]
                     if(cell.value != 0){
@@ -149,5 +140,11 @@ class Board{
             }
         }
         return true
+    }
+
+    print(){
+        for (let i = 1; i <= 9; i++) {
+            console.log(this.getRow(i).map(c => c.value));
+        }
     }
 }
