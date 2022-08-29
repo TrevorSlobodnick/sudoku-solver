@@ -62,6 +62,10 @@ function onFindBtnClick(e){
  * @param {Event} e the event object
  */
 function onCellInput(e){
+    // if the user enters a backspace, there is no need to apply any additional logic, so simply exit function
+    if(e.inputType === "deleteContentBackward"){
+        return
+    }
     const regex = /^[1-9]$/
     if(!regex.test(e.currentTarget.value)){
         e.currentTarget.value = e.currentTarget.value.slice(0, -1)
