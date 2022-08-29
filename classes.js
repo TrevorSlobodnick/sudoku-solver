@@ -58,8 +58,8 @@ class Board{
      * @param {Position} pos the Position of the Cell
      * @returns {Cell} the requested cell
      */
-    getCell(pos){
-        return this.cells.find(value => value.pos.row === pos.row && value.pos.col === pos.col)
+    async getCell(pos){
+        return Promise.resolve(this.cells.find(value => value.pos.row === pos.row && value.pos.col === pos.col))
     }
 
     /**
@@ -67,8 +67,8 @@ class Board{
      * @param {Number} num the row to get [1-9]
      * @returns {Array<Cell>} the requested row
      */
-    getRow(num){
-        return this.cells.filter(value => value.pos.row === num)
+    async getRow(num){
+        return Promise.resolve(this.cells.filter(value => value.pos.row === num))
     }
 
     /**
@@ -76,8 +76,8 @@ class Board{
      * @param {Number} num the column to get [1-9]
      * @returns {Array<Cell>} the requested column
      */
-    getColumn(num){
-        return this.cells.filter(value => value.pos.col === num)
+    async getColumn(num){
+        return Promise.resolve(this.cells.filter(value => value.pos.col === num))
     }
 
     /**
@@ -85,25 +85,11 @@ class Board{
      * @param {Number} num the box to get [1-9]
      * @returns {Array<Cell>} the requested box
      */
-    getBox(num){
-        return this.cells.filter(value => value.box === num)
+    async getBox(num){
+        return Promise.resolve(this.cells.filter(value => value.box === num))
     }
 
-    /**
-     * Checks if every cell in the board contains a non-zero value
-     * @returns {Boolean} true if every cell contains a non-zero value, false otherwise
-     */
-    isFilled(){
-        for (let i = 0; i < this.cells.length; i++) {
-            const cell = this.cells[i];
-            if(cell.value === 0){
-                return false
-            }
-        }
-        return true
-    }
-
-    isValid(){
+    async isValid(){
         // we need these functions so that they can be used in the middle for loop
         // we need to use bind in order to provide scope, adding .bind(this) will make sure that when
         // we call functions[i](j), the this. statements in those functions are referring to Board object (local scope),
@@ -120,7 +106,7 @@ class Board{
             for (let j = 1; j <= 9; j++) {
                 // j represents which row/column/box we are on
                 // combined with i, we can now call our functions to get appropriate cells
-                const cells = functions[i](j)
+                const cells = await functions[i](j)
                 // cells is an array containing the 9 cells
                 // nonZeroValues is used to track the values in cells while iterating
                 let nonZeroValues = []
@@ -144,7 +130,9 @@ class Board{
 
     print(){
         for (let i = 1; i <= 9; i++) {
-            console.log(this.getRow(i).map(c => c.value));
+            this.getRow(i).then(row => {
+                console.log(row.map(c => c.value))
+            })
         }
     }
 }

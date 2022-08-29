@@ -86,7 +86,7 @@ function matchCellHeightToWidth(e){
  */
 async function findSolution(board, pos = new Position(1, 1)){
     // if the board is not solved, we need to start plugging in numbers
-    const cell = board.getCell(pos)
+    const cell = await board.getCell(pos)
     // there are 9 possible values a cell could be...
     for (let i = 1; i <= 9; i++) {
         // since we cant override user inputted values, we need to check before overriding
@@ -94,8 +94,8 @@ async function findSolution(board, pos = new Position(1, 1)){
             cell.value = i
         }
         // board.isValid simply checks if the current cell values dont break any rules
-        if(board.isValid()){
-            if(pos.hasNext()){
+        if(await board.isValid()){
+            if(await pos.hasNext()){
                 const r = await findSolution(board, pos.next())
                 if(r){
                     return Promise.resolve(true)
