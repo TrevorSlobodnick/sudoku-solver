@@ -34,26 +34,19 @@ cellInputs.forEach(inp => inp.addEventListener("input", onCellInput))
 window.addEventListener('resize', matchCellHeightToWidth);
 // listeners for both of the solution buttons
 findOneBtn.addEventListener("click", onFindBtnClick)
-findAllBtn.addEventListener("click", onFindBtnClick)
 
 // Event Handler Functions
 function onFindBtnClick(e){
     const board = new Board(getCells())
-    if(e.currentTarget == findOneBtn){
-        if(findSolution)
-        findSolution(board).then(result => {
-            if(result){
-                console.log("Solved")
-            }
-            else{
-                console.log("Cannot Solve")
-            }
-            board.print()
-        })
-    }
-    else{
-        //TODO: implement finding all solutions
-    }
+    findSolution(board).then(result => {
+        if(result){
+            console.log("Solved")
+        }
+        else{
+            console.log("Cannot Solve")
+        }
+        board.print()
+    })
 }
 
 /**
