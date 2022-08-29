@@ -5,7 +5,6 @@ const cellNodes = sudokuTable.querySelectorAll(".form-control");
 const cellInputs = Array.from(cellNodes)
 // The get solution buttons
 const findOneBtn = document.getElementById("find-one");
-const findAllBtn = document.getElementById("find-all");
 
 // Toasts
 let canDisplayInvalidInputToast = true;
