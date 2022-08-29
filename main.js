@@ -96,7 +96,7 @@ async function findSolution(board, pos = new Position(1, 1)){
         // board.isValid simply checks if the current cell values dont break any rules
         if(await board.isValid()){
             if(await pos.hasNext()){
-                const r = await findSolution(board, pos.next())
+                const r = await findSolution(board, await pos.next())
                 if(r){
                     return Promise.resolve(true)
                 }

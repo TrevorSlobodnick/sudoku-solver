@@ -10,18 +10,18 @@ class Position{
         this.col = col
     }
 
-    hasNext(){
+    async hasNext(){
         if(this.row === 9 && this.col === 9){
-            return false
+            return Promise.resolve(false)
         }
-        return true
+        return Promise.resolve(true)
     }
 
-    next(){
+    async next(){
         if(this.col === 9){
-            return new Position(this.row + 1, 1)
+            return Promise.resolve(new Position(this.row + 1, 1))
         }
-        return new Position(this.row, this.col + 1)
+        return Promise.resolve(new Position(this.row, this.col + 1))
     }
 }
 
