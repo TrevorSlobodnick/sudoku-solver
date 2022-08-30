@@ -29,7 +29,7 @@ function onFindBtnClick(e){
     findSolution(board).then(result => {
         if(result){
             //Solved
-            displayBoard()
+            displayBoard(board)
         }
         else{
             //Unsolved
@@ -46,7 +46,8 @@ function onFindBtnClick(e){
 
 /**
  * Handles the input of all the sudoku fields. 
- * NOTE: Only numbers and some special characters are recognized as inputs since the field type is number
+ * NOTE: Only numbers and some special characters are recognized as inputs since the field type is number,
+ * meaning that this event will only fire when a recognized input is entered
  * @param {Event} e the event object
  */
 function onCellInput(e){
@@ -142,8 +143,22 @@ function getCells(){
     return cells
 }
 
-function displayBoard(){
-    
+/**
+ * Displays the cells inside the board
+ * @param {Board} board - the sudoku board
+ */
+function displayBoard(board){
+    cellInputs.forEach(input => {
+        const row = parseInt(input.dataset.row)
+        const col = parseInt(input.dataset.col)
+        board.getCell(new Position(row, col)).then(cell => {
+            if(!cell.isProtected){
+                input.value = cell.value
+                // give blue styling to show it was added by us
+                input.style.color = "blue"
+            }
+        })
+    })
 }
 
 /**
