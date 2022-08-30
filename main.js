@@ -30,6 +30,7 @@ function onFindBtnClick(e){
         if(result){
             //Solved
             displayBoard(board)
+            findOneBtn.disabled = true
         }
         else{
             //Unsolved
@@ -156,6 +157,7 @@ function displayBoard(board){
                 input.value = cell.value
                 // give blue styling to show it was added by us
                 input.style.color = "blue"
+                input.disabled = true
             }
         })
     })
