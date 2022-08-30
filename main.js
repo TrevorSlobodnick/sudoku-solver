@@ -7,21 +7,10 @@ const cellInputs = Array.from(cellNodes)
 const findOneBtn = document.getElementById("find-one");
 
 // Toasts
-let canDisplayInvalidInputToast = true;
-const invalidInputToast = Toastify({
-    text: "Invalid Input\nPlease enter a number between 1 and 9",
-    duration: 3000,
-    gravity: "bottom",
-    position: "center",
-    stopOnFocus: "false",
-    style: {
-        background: "#DC3545"
-    },
-    callback: function(){
-        // fires when toast is dismissed
-        canDisplayInvalidInputToast = true
-    }
-})
+let canDisplayInvalidToast = true;
+let canDisplayUnsolvableToast = true;
+const invalidInputToast = errorToast("Input must be between 1 and 9", 3000, function(){ canDisplayInvalidToast = true })
+const unsolvableBoardToast = errorToast("Board is unsolvable", 3000, function(){ canDisplayUnsolvableToast = true })
 
 // Init
 // sets the height of the input cells so that they are equal to the width
@@ -39,12 +28,19 @@ function onFindBtnClick(e){
     const board = new Board(getCells())
     findSolution(board).then(result => {
         if(result){
-            console.log("Solved")
+            //Solved
+            displayBoard()
         }
         else{
-            console.log("Cannot Solve")
+            //Unsolved
+            // check value to make sure we can display the toast
+            if(canDisplayUnsolvableToast){
+                // show the toast
+                unsolvableBoardToast.showToast()
+                // set value to false so toast cannot be displayed (prevents spamming)
+                canDisplayUnsolvableToast = false
+            }
         }
-        board.print()
     })
 }
 
@@ -59,11 +55,16 @@ function onCellInput(e){
         return
     }
     const regex = /^[1-9]$/
+    // if input is not between 1 and 9...
     if(!regex.test(e.currentTarget.value)){
+        // set value equal to previous value...
         e.currentTarget.value = e.currentTarget.value.slice(0, -1)
-        if(canDisplayInvalidInputToast){
+        // check value to make sure we can display the toast
+        if(canDisplayInvalidToast){
+            // show the toast
             invalidInputToast.showToast()
-            canDisplayInvalidInputToast = false
+            // set value to false so toast cannot be displayed (prevents spamming)
+            canDisplayInvalidToast = false
         }
     }
 }
@@ -103,7 +104,6 @@ async function findSolution(board, pos = new Position(1, 1)){
             }
             else{
                 // Board has no more cells
-                console.log("Board has no more cells");
                 return Promise.resolve(true)
             }
         }
@@ -140,4 +140,29 @@ function getCells(){
         cells.push(cell)
     })
     return cells
+}
+
+function displayBoard(){
+    
+}
+
+/**
+ * Creates a toast with a red background
+ * @param {String} message - the message to display in the toast
+ * @param {Number} duration - how long the toast should display, in milliseconds
+ * @param {Function} callback - function to call when the toast disappears
+ * @returns {Toastify} - toast
+ */
+function errorToast(message, duration, callback = null){
+    return Toastify({
+        text: message,
+        duration: duration,
+        gravity: "bottom",
+        position: "center",
+        stopOnFocus: "false",
+        style: {
+            background: "#DC3545"
+        },
+        callback: callback
+    })
 }
