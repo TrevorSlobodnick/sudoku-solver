@@ -184,14 +184,18 @@ class ToastBuilder{
                 background: "#0dcaf0" // sky blue
             }
         }
-        return Toastify({
+        const toast = Toastify({
             text: message,
             duration: duration,
             gravity: "bottom",
             position: "center",
             stopOnFocus: "false",
             style: style,
-            callback: callback
+            callback: callback,
+            onClick: function () {
+                toast.hideToast();
+            },
         })
+        return toast
     }
 }
