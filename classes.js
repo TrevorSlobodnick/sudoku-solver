@@ -42,6 +42,19 @@ class Cell{
         this.value = value
         this.isProtected = isProtected
     }
+
+    async getPossibleValues(board){
+        const allValues = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        const row = await board.getRow(this.pos.row)
+        const col = await board.getRow(this.pos.col)
+        const box = await board.getRow(this.pos.box)
+        let impossibleValues = Array.from(new Set([row, col, box].flat().map(c => c.value)))
+        const index = impossibleValues.indexOf(0)
+        if(index > -1){
+            impossibleValues.splice(index, 1)
+        }
+        return allValues.filter(v => !impossibleValues.includes(v))
+    }
 }
 
 class Board{

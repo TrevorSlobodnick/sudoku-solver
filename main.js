@@ -18,7 +18,7 @@ cellInputs.forEach(inp => inp.addEventListener("input", onCellInput))
 // sets the height of the input cells so that they are equal to the width
 matchCellHeightToWidth();
 // Optional: call the prefill() function to set the board to the worlds hardest sudoku
-prefill()
+// prefill()
 
 // Event Listeners
 // listens for a window resize event, and then updates the columns
@@ -130,14 +130,13 @@ async function findSolution(board, pos = new Position(1, 1)){
     // if the board is not solved, we need to start plugging in numbers
     const cell = await board.getCell(pos)
     // there are 9 possible values a cell could be...
+    // const possibleValues = await cell.getPossibleValues(board)
     for (let i = 1; i <= 9; i++) {
         // since we cant override user inputted values, we need to check before overriding
         if(!cell.isProtected){
-            // 
+            // set cell value equal to i
             cell.value = i
         }
-        if(cell.pos.row == 1 && cell.pos.col == 2) 
-            console.log(cell);
         // board.isValid simply checks if the current cell values dont break any rules
         if(await board.isValid()){
             if(await pos.hasNext()){
