@@ -5,6 +5,7 @@ const cellNodes = sudokuTable.querySelectorAll(".form-control");
 const cellInputs = Array.from(cellNodes)
 // The get solution buttons
 const findOneBtn = document.getElementById("find-one");
+const resetBtn = document.getElementById("reset");
 
 // Toasts
 let canDisplayInvalidToast = true;
@@ -22,10 +23,30 @@ matchCellHeightToWidth();
 // Event Listeners
 // listens for a window resize event, and then updates the columns
 window.addEventListener('resize', matchCellHeightToWidth);
-// listeners for both of the solution buttons
+// click event listeners
 findOneBtn.addEventListener("click", onFindBtnClick)
+resetBtn.addEventListener("click", onResetClick)
 
 // Event Handler Functions
+/**
+ * This function gets called when the user clicks on the reset button.
+ * It simply resets the board an empty state, as well as toggling the button state
+ */
+function onResetClick(){
+    // make each cell editable again as well as reset value to empty
+    cellInputs.forEach(cell => { 
+        cell.disabled = false 
+        cell.value = ""
+        cell.style.removeProperty("color")
+    })
+    findOneBtn.disabled = false
+    resetBtn.disabled = true
+}
+
+/**
+ * This function gets called when the user clicks the find solution button.
+ * It solves the sudoku board using the naive backtracking algorithm
+ */
 function onFindBtnClick(e){
     const start = new Date()
     findOneBtn.disabled = true
@@ -42,6 +63,8 @@ function onFindBtnClick(e){
             displayBoard(board)
             // disable additional input for sudoku board
             cellInputs.forEach(cell => { cell.disabled = true })
+            // enable reset button
+            resetBtn.disabled = false
         }
         else{
             //Unsolved
