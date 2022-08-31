@@ -9,8 +9,8 @@ const findOneBtn = document.getElementById("find-one");
 // Toasts
 let canDisplayInvalidToast = true;
 let canDisplayUnsolvableToast = true;
-const invalidInputToast = errorToast("Input must be between 1 and 9", 3000, function(){ canDisplayInvalidToast = true })
-const unsolvableBoardToast = errorToast("Board is unsolvable", 3000, function(){ canDisplayUnsolvableToast = true })
+const invalidInputToast = new ToastBuilder(ToastBuilder.Type.Error, "Input must be between 1 and 9", 3000, function(){ canDisplayInvalidToast = true })
+const unsolvableBoardToast = new ToastBuilder(ToastBuilder.Type.Error, "Board is unsolvable", 3000, function(){ canDisplayUnsolvableToast = true })
 
 // Init
 // first get all inputs in the board
@@ -28,12 +28,13 @@ findOneBtn.addEventListener("click", onFindBtnClick)
 
 // Event Handler Functions
 function onFindBtnClick(e){
-    console.log("Searching for solution");
+    console.log("Searching for solution...");
     const start = new Date()
     findOneBtn.disabled = true
     const board = new Board(getCells())
     findSolution(board).then(result => {
         const end = new Date()
+
         console.log(`Solution found in ${end.getTime() - start.getTime()} seconds`);
         if(result){
             //Solved
@@ -216,26 +217,5 @@ function displayBoard(board){
                 input.disabled = true
             }
         })
-    })
-}
-
-/**
- * Creates a toast with a red background
- * @param {String} message - the message to display in the toast
- * @param {Number} duration - how long the toast should display, in milliseconds
- * @param {Function} callback - function to call when the toast disappears
- * @returns {Toastify} - toast
- */
-function errorToast(message, duration, callback = null){
-    return Toastify({
-        text: message,
-        duration: duration,
-        gravity: "bottom",
-        position: "center",
-        stopOnFocus: "false",
-        style: {
-            background: "#DC3545"
-        },
-        callback: callback
     })
 }

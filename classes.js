@@ -149,3 +149,46 @@ class Board{
         }
     }
 }
+
+class ToastBuilder{
+    static Type = {
+        Generic: "Generic",
+        Success: "Success",
+        Error: "Error"
+    }
+    /**
+     * Creates a toast of a the specified type
+    * @param {ToastBuilder.Type} - the type of Toast to build
+    * @param {String} message - the message to display in the toast
+    * @param {Number} duration - how long the toast should display, in milliseconds
+    * @param {Function} callback - function to call when the toast disappears
+    * @returns {Toastify} - toast
+     */
+    constructor(type, message, duration, callback = null){
+        let style = {}
+        if(type === ToastBuilder.Type.Success){
+            style = {
+                background: "#198754" // green
+            }
+        }
+        else if(type === ToastBuilder.Type.Error){
+            style = {
+                background: "#DC3545" // red
+            }
+        }
+        else{
+            style = {
+                background: "#0dcaf0" // sky blue
+            }
+        }
+        return Toastify({
+            text: message,
+            duration: duration,
+            gravity: "bottom",
+            position: "center",
+            stopOnFocus: "false",
+            style: style,
+            callback: callback
+        })
+    }
+}
