@@ -40,6 +40,8 @@ function onFindBtnClick(e){
             timeToast.showToast()
             // update inputs with board values
             displayBoard(board)
+            // disable additional input for sudoku board
+            cellInputs.forEach(cell => { cell.disabled = true })
         }
         else{
             //Unsolved
@@ -194,7 +196,7 @@ function getCells(){
 }
 
 /**
- * Displays the cells inside the board, displaying them in blue and disabling additional input
+ * Displays the cells inside the board, displaying them in blue
  * @param {Board} board - the sudoku board
  */
 function displayBoard(board){
@@ -209,8 +211,6 @@ function displayBoard(board){
                 input.value = cell.value
                 // give blue styling to show it was added by us
                 input.style.color = "blue"
-                // disable input so the user cant change it
-                input.disabled = true
             }
         })
     })
