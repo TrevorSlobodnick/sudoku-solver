@@ -168,16 +168,19 @@ class ToastBuilder{
         let style = {}
         if(type === ToastBuilder.Type.Success){
             style = {
+                color: "white",
                 background: "#198754" // green
             }
         }
         else if(type === ToastBuilder.Type.Error){
             style = {
+                color: "white",
                 background: "#DC3545" // red
             }
         }
         else{
             style = {
+                color: "black",
                 background: "#0dcaf0" // sky blue
             }
         }
