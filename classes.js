@@ -141,6 +141,24 @@ class Board{
         return true
     }
 
+    /**
+     * Used to determine if the every cell in the board contains a number between 1 and 9.
+     * If it does, it will return true; otherwise, it will return false
+     * @returns {Boolean} true or false
+     */
+    isFilled(){
+        const possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        let filled = true;
+        for (let i = 0; i < this.cells.length; i++) {
+            const c = this.cells[i];
+            if(!possibleValues.includes(c.value)){
+                filled = false
+                break
+            }
+        }
+        return filled
+    }
+
     print(){
         for (let i = 1; i <= 9; i++) {
             this.getRow(i).then(row => {

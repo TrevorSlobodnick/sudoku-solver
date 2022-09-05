@@ -12,6 +12,9 @@ let canDisplayInvalidToast = true;
 const invalidInputToast = new ToastBuilder(ToastBuilder.Type.Error, "Input must be between 1 and 9", 3000, function(){ canDisplayInvalidToast = true })
 const unsolvableBoardToast = new ToastBuilder(ToastBuilder.Type.Error, "Board is unsolvable", 3000)
 
+// Workers
+const backtrackWorker = new Worker("backtrack-worker.js")
+
 // Init
 // first get all inputs in the board
 cellInputs.forEach(inp => inp.addEventListener("input", onCellInput))
@@ -50,10 +53,14 @@ function onResetClick(){
 function onFindBtnClick(e){
     const start = new Date()
     findOneBtn.disabled = true
-    const board = new Board(getCells())
-    findSolution(board).then(result => {
+    let board = new Board(getCells())
+    backtrackWorker.postMessage(board)
+    backtrackWorker.onmessage = (message) => {
+        const data = message.data
+        const cells = data.cells.map(c => new Cell(c.box, new Position(c.pos.row, c.pos.col), c.value, c.isProtected))
+        board = new Board(cells)
         const end = new Date()
-        if(result){
+        if(board.isFilled()){
             //Solved
             // declare toast to display time taken
             const timeToast = new ToastBuilder(ToastBuilder.Type.Generic, `Solution found in ${(end.getTime() - start.getTime()) / 100} seconds`, 3000)
@@ -73,7 +80,7 @@ function onFindBtnClick(e){
             // show toast
             unsolvableBoardToast.showToast()
         }
-    })
+    }
 }
 
 /**
@@ -141,46 +148,6 @@ function prefill(){
     find(8, 8).value = 1
     find(9, 2).value = 9
     find(9, 7).value = 4
-}
-
-/**
- * Find a single solution or every solution for a given sudoku board
- * @param {Array<Cell>} board - An array of all the Cells on the board
- * @param {Position} pos - the current position
- */
-async function findSolution(board, pos = new Position(1, 1)){
-    // if the board is not solved, we need to start plugging in numbers
-    const cell = await board.getCell(pos)
-    // there are 9 possible values a cell could be...
-    // const possibleValues = await cell.getPossibleValues(board)
-    for (let i = 1; i <= 9; i++) {
-        // since we cant override user inputted values, we need to check before overriding
-        if(!cell.isProtected){
-            // set cell value equal to i
-            cell.value = i
-        }
-        // board.isValid simply checks if the current cell values dont break any rules
-        if(await board.isValid()){
-            if(await pos.hasNext()){
-                // wait for the result...
-                const result = await findSolution(board, await pos.next())
-                if(result){
-                    // if its true, return;
-                    return Promise.resolve(true)
-                }
-            }
-            else{
-                // Board has no more cells
-                return Promise.resolve(true)
-            }
-        }
-        // since we cant override user inputted values, we need to check before overriding
-        if(!cell.isProtected){
-            // set to initial value
-            cell.value = 0
-        }
-    }
-    return Promise.resolve(false)
 }
 
 /**
