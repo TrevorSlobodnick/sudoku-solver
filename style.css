@@ -55,9 +55,6 @@ body {
 }
 
 
-
-
-
 /* START - HIDE UP AND DOWN ARROWS FROM INPUT */
 /* Chrome, Safari, Edge, Opera */
 #sudoku-table .form-control::-webkit-outer-spin-button,

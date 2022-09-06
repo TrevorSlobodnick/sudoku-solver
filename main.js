@@ -6,6 +6,8 @@ const cellInputs = Array.from(cellNodes)
 // The get solution buttons
 const findOneBtn = document.getElementById("find-one");
 const resetBtn = document.getElementById("reset");
+// Bootstrap Modal
+const solvingModal = new bootstrap.Modal(document.getElementById('solving-modal'), { backdrop: "static", keyboard: false })
 
 // Toasts
 let canDisplayInvalidToast = true;
@@ -13,7 +15,7 @@ const invalidInputToast = new ToastBuilder(ToastBuilder.Type.Error, "Input must 
 const unsolvableBoardToast = new ToastBuilder(ToastBuilder.Type.Error, "Board is unsolvable", 3000)
 
 // Workers
-const backtrackWorker = new Worker("backtrack-worker.js")
+let backtrackWorker = new Worker("backtrack-worker.js")
 
 // Init
 // first get all inputs in the board
@@ -21,7 +23,7 @@ cellInputs.forEach(inp => inp.addEventListener("input", onCellInput))
 // sets the height of the input cells so that they are equal to the width
 matchCellHeightToWidth();
 // Optional: call the prefill() function to set the board to the worlds hardest sudoku
-// prefill()
+prefill()
 
 // Event Listeners
 // listens for a window resize event, and then updates the columns
@@ -51,11 +53,21 @@ function onResetClick(){
  * It solves the sudoku board using the naive backtracking algorithm
  */
 function onFindBtnClick(e){
+    // Set timeout to reduce the flickering of the modal
+    const showModal = setTimeout(function(){
+        // Show Modal
+        solvingModal.show()
+    }, 500)
     const start = new Date()
+    // disable button
     findOneBtn.disabled = true
+    // set board
     let board = new Board(getCells())
+    // Time to solve sudoku using worker
     backtrackWorker.postMessage(board)
     backtrackWorker.onmessage = (message) => {
+        clearTimeout(showModal)
+        solvingModal.hide()
         const data = message.data
         const cells = data.cells.map(c => new Cell(c.box, new Position(c.pos.row, c.pos.col), c.value, c.isProtected))
         board = new Board(cells)
