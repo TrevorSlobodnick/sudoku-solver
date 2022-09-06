@@ -8,6 +8,7 @@ const findOneBtn = document.getElementById("find-one");
 const resetBtn = document.getElementById("reset");
 // Bootstrap Modal
 const solvingModal = new bootstrap.Modal(document.getElementById('solving-modal'), { backdrop: "static", keyboard: false })
+const cancelSolvingModalBtn = document.getElementById("cancel-solving-modal-btn")
 
 // Toasts
 let canDisplayInvalidToast = true;
@@ -15,7 +16,7 @@ const invalidInputToast = new ToastBuilder(ToastBuilder.Type.Error, "Input must 
 const unsolvableBoardToast = new ToastBuilder(ToastBuilder.Type.Error, "Board is unsolvable", 3000)
 
 // Workers
-let backtrackWorker = new Worker("backtrack-worker.js")
+let backtrackWorker
 
 // Init
 // first get all inputs in the board
@@ -31,6 +32,7 @@ window.addEventListener('resize', matchCellHeightToWidth);
 // click event listeners
 findOneBtn.addEventListener("click", onFindBtnClick)
 resetBtn.addEventListener("click", onResetClick)
+cancelSolvingModalBtn.addEventListener("click", onCancelSolving)
 
 // Event Handler Functions
 /**
@@ -49,10 +51,23 @@ function onResetClick(){
 }
 
 /**
+ * Fires when the Cancel button is clicked in the solving-modal.
+ * It terminates the current worker that is attempting to find a solution, and
+ * resets the board to allow input
+ */
+function onCancelSolving(){
+    // stop searching for solution
+    backtrackWorker.terminate()
+    // enable find solution button
+    findOneBtn.disabled = false
+}
+
+/**
  * This function gets called when the user clicks the find solution button.
  * It solves the sudoku board using the naive backtracking algorithm
  */
 function onFindBtnClick(e){
+    backtrackWorker = new Worker("backtrack-worker.js")
     // Set timeout to reduce the flickering of the modal
     const showModal = setTimeout(function(){
         // Show Modal
@@ -66,6 +81,7 @@ function onFindBtnClick(e){
     // Time to solve sudoku using worker
     backtrackWorker.postMessage(board)
     backtrackWorker.onmessage = (message) => {
+        backtrackWorker.terminate()
         clearTimeout(showModal)
         solvingModal.hide()
         const data = message.data
