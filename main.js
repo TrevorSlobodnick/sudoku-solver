@@ -24,7 +24,7 @@ cellInputs.forEach(inp => inp.addEventListener("input", onCellInput))
 // sets the height of the input cells so that they are equal to the width
 matchCellHeightToWidth();
 // Optional: call the prefill() function to set the board to the worlds hardest sudoku
-prefill()
+prefill(easy)
 
 // Event Listeners
 // listens for a window resize event, and then updates the columns
@@ -149,33 +149,22 @@ function matchCellHeightToWidth(e){
 }
 
 /**
- * Set the board to the worlds hardest sudoku - https://abcnews.go.com/blogs/headlines/2012/06/can-you-solve-the-hardest-ever-sudoku
+ * Prefill the board input values given a 9x9 matrix (Array of Arrays).
+ * @param {Array<Array<Number>>} matrix - A matrix defined in prefill-constants.js
  */
-function prefill(){
+function prefill(matrix){
     function find(row, col){
         return cellInputs.find(inp => inp.dataset.row == row && inp.dataset.col == col)
     }
-    find(1, 1).value = 8
-    find(2, 3).value = 3
-    find(2, 4).value = 6
-    find(3, 2).value = 7
-    find(3, 5).value = 9
-    find(3, 7).value = 2
-    find(4, 2).value = 5
-    find(4, 6).value = 7
-    find(5, 5).value = 4
-    find(5, 6).value = 5
-    find(5, 7).value = 7
-    find(6, 4).value = 1
-    find(6, 8).value = 3
-    find(7, 3).value = 1
-    find(7, 8).value = 6
-    find(7, 9).value = 8
-    find(8, 3).value = 8
-    find(8, 4).value = 5
-    find(8, 8).value = 1
-    find(9, 2).value = 9
-    find(9, 7).value = 4
+    for (let i = 0; i < matrix.length; i++) {
+        const row = matrix[i];
+        for (let j = 0; j < row.length; j++) {
+            const cellValue = row[j];
+            if(cellValue !== 0){
+                find(i + 1, j + 1).value = cellValue
+            }
+        }
+    }
 }
 
 /**
