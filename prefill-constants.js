@@ -1,15 +1,15 @@
 // Boards with varying difficulty, easy => expert were gotten from https://sudoku.com/
 // The master board is supposedly the hardest in the world, found at // Hardest in world - https://abcnews.go.com/blogs/headlines/2012/06/can-you-solve-the-hardest-ever-sudoku
 
-const easy = [
-    [1, 6, 0, 7, 9, 8, 3, 2, 0],
-    [4, 2, 9, 3, 0, 6, 5, 8, 0],
-    [0, 0, 7, 0, 0, 0, 1, 9, 0],
-    [0, 0, 0, 5, 0, 0, 0, 0, 9],
-    [0, 4, 3, 0, 6, 7, 0, 0, 0],
-    [6, 5, 0, 0, 0, 0, 0, 3, 0],
-    [0, 0, 0, 6, 0, 1, 0, 7, 2],
-    [2, 0, 0, 0, 5, 9, 0, 0, 3],
+const easy = [ // 213 seconds
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 6, 0, 1, 0, 0, 0],
+    [2, 0, 0, 0, 5, 0, 0, 0, 3],
     [0, 0, 4, 0, 0, 0, 0, 6, 0]
 ]
 
