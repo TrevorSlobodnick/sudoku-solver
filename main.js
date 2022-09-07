@@ -24,7 +24,7 @@ cellInputs.forEach(inp => inp.addEventListener("input", onCellInput))
 // sets the height of the input cells so that they are equal to the width
 matchCellHeightToWidth();
 // Optional: call the prefill() function to set the board to the worlds hardest sudoku
-prefill(easy)
+// prefill(easy)
 
 // Event Listeners
 // listens for a window resize event, and then updates the columns
